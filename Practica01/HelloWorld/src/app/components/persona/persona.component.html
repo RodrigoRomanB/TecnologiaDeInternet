@@ -1,0 +1,174 @@
+<div class="container-fluid">
+    <div class="card mb-3">
+<!-- Header  -->
+        <div class="card text-white bg-primary mb-3">
+            <h3><i class="fas fa-user-circle"></i>&nbsp;&nbsp;Personas<button style="float: right;" (click)="openModalPersona()" type="button" class="btn btn-warning">Agregar</button></h3>
+        </div>
+
+        <!-- Body  --> 
+        <div class="card-body">
+            <table class="table">
+                <thead>
+                    <tr class="table-success">
+                        <th class="text-center"><i class="fas fa-circle"></i>&nbsp;Nombre</th>
+                        <th class="text-center"><i class="fas fa-circle"></i>&nbsp;Apellidos</th>
+                        <th class="text-center"><i class="fas fa-calendar"></i>&nbsp;Fecha de Nacimiento</th>
+                        <th class="text-center"><i class="fas fa-home"></i>&nbsp;Domicilio</th>
+                        <th class="text-center"><i class="far fa-id-card"></i>&nbsp;RFC</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let persona of personas">
+                        <td class="text-center">{{ persona.nombre }}</td>
+                        <td class="text-center">{{ persona.apellidos }}</td>
+                        <td class="text-center">{{ persona.fecha_nacimiento }}</td>
+                        <td class="text-center">{{ persona.domicilio }}</td>
+                        <td class="text-center">{{ persona.rfc }}</td>
+
+                        <td>
+                            <div>
+                                <div class="modal" id="personaEdit">
+                                    <div class="modal-dialog modal-lg">
+                                        <div class="modal-content">
+                                
+                                            <div class="modal-header">
+                                                <h4 class="modal-title">Editar Persona</h4>
+                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                            </div>
+                                
+                                            <div class="modal-body">
+                                                <form [formGroup]="personaForm" (ngSubmit)="updatePersona(persona.id)">
+                                                    <div class="form-group">
+                                                        <label for="nombre">Nombre<span class="text-danger">*</span></label>
+                                                        <input type="text" formControlName="nombre" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.nombre.errors }">
+                                                        <div *ngIf="submitted && f.nombre.errors" class="invalid-feedback">
+                                                            <div *ngIf="f.nombre.errors.required">El nombre de la persona es obligatorio</div>
+                                                        </div>
+                                                    </div>
+                                
+                                                    <div class="form-group">
+                                                        <label for="apellidos">Apellidos<span class="text-danger">*</span></label>
+                                                        <input type="text" formControlName="apellidos" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.apellidos.errors }" />
+                                                        <div *ngIf="submitted && f.apellidos.errors" class="invalid-feedback">
+                                                        <div *ngIf="f.apellidos.errors.required">Los apellidos de la persona son obligatorios</div>
+                                                        </div>
+                                                    </div>
+                                            
+                                                    <div class="form-group">
+                                                    <label for="fecha_nacimiento">Fecha de nacimiento<span class="text-danger">*</span></label>
+                                                    <input type="date" formControlName="fecha_nacimiento" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.fecha_nacimiento.errors }" />
+                                                    <div *ngIf="submitted && f.fecha_nacimiento.errors" class="invalid-feedback">
+                                                        <div *ngIf="f.fecha_nacimiento.errors.required">La fecha de nacimiento de la persona es obligatorio</div>
+                                                    </div>
+                                                </div>
+                                            
+                                                    <div class="form-group">
+                                                        <label for="domicilio">Domicilio<span class="text-danger">*</span></label>
+                                                        <textarea rows="3" formControlName="domicilio" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.domicilio.errors }"></textarea>
+                                                        <div *ngIf="submitted && f.domicilio.errors" class="invalid-feedback">
+                                                        <div *ngIf="f.domicilio.errors.required">El domicilio de la persona es obligatorio</div>
+                                                        </div>
+                                                    </div>
+                                            
+                                                    <div class="form-group">
+                                                        <label for="rfc">RFC<span class="text-danger">*</span></label>
+                                                        <input type="text" formControlName="rfc" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.rfc.errors }" />
+                                                        <div *ngIf="submitted && f.rfc.errors" class="invalid-feedback">
+                                                        <div *ngIf="f.rfc.errors.required">El RFC de la persona es obligatorio</div>
+                                                        </div>
+                                                    </div>
+                                
+                                                    <p class="text-right"><span class="text-danger">*</span> Campos requeridos</p>
+                                                    <div>
+                                                        <button class="btn btn-success btn-block">Guardar</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                
+                                            <div class="modal-footer">
+                                                <button class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                                            </div>
+                                        
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn btn-outline-info" (click)="openEditPersona()">Editar&nbsp;<i class="fas fa-edit"></i></button>
+                                &nbsp;&nbsp;
+                                <button type="button" class="btn btn-outline-warning" (click)="deletePersona(persona.id)">Eliminar&nbsp;<i class="fas fa-trash"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<br><br>
+
+<div class="modal" id="personaModal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h4 class="modal-title">Agregar Persona</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <div class="modal-body">
+                <form [formGroup]="personaForm" (ngSubmit)="createPersona()">
+                    <div class="form-group">
+                        <label for="nombre">Nombre<span class="text-danger">*</span></label>
+                        <input type="text" formControlName="nombre" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.nombre.errors }">
+                        <div *ngIf="submitted && f.nombre.errors" class="invalid-feedback">
+                            <div *ngIf="f.nombre.errors.required">El nombre de la persona es obligatorio</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="apellidos">Apellidos<span class="text-danger">*</span></label>
+                        <input type="text" formControlName="apellidos" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.apellidos.errors }" />
+                        <div *ngIf="submitted && f.apellidos.errors" class="invalid-feedback">
+                        <div *ngIf="f.apellidos.errors.required">Los apellidos de la persona son obligatorios</div>
+                        </div>
+                    </div>
+            
+                    <div class="form-group">
+                    <label for="fecha_nacimiento">Fecha de nacimiento<span class="text-danger">*</span></label>
+                    <input type="date" formControlName="fecha_nacimiento" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.fecha_nacimiento.errors }" />
+                    <div *ngIf="submitted && f.fecha_nacimiento.errors" class="invalid-feedback">
+                        <div *ngIf="f.fecha_nacimiento.errors.required">La fecha de nacimiento de la persona es obligatorio</div>
+                    </div>
+                </div>
+            
+                    <div class="form-group">
+                        <label for="domicilio">Domicilio<span class="text-danger">*</span></label>
+                        <textarea rows="3" formControlName="domicilio" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.domicilio.errors }"></textarea>
+                        <div *ngIf="submitted && f.domicilio.errors" class="invalid-feedback">
+                        <div *ngIf="f.domicilio.errors.required">El domicilio de la persona es obligatorio</div>
+                        </div>
+                    </div>
+            
+                    <div class="form-group">
+                        <label for="rfc">RFC<span class="text-danger">*</span></label>
+                        <input type="text" formControlName="rfc" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.rfc.errors }" />
+                        <div *ngIf="submitted && f.rfc.errors" class="invalid-feedback">
+                        <div *ngIf="f.rfc.errors.required">El RFC de la persona es obligatorio</div>
+                        </div>
+                    </div>
+
+                    <p class="text-right"><span class="text-danger">*</span> Campos requeridos</p>
+                    <div>
+                        <button class="btn btn-success btn-block">Guardar</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        
+        </div>
+    </div>
+</div>
+

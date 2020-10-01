@@ -1,0 +1,12 @@
+{
+  "personas": [
+    {
+      "id": 3,
+      "nombre": "Rodrigo",
+      "apellidos": "Roman",
+      "fecha_nacimiento": "1998-07-31",
+      "domicilio": "San Matias 187",
+      "rfc": "ROBR980731"
+    }
+  ]
+}
